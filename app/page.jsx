@@ -28,6 +28,7 @@ const HomePage = () => {
     const [titoloL9, setT9] = useState("Livello 9");
     const [medicacode, setMediacode] = useState("");
     const [formData, setFormData] = useState({
+        url: '',
         livello4: '',
         livello5: '',
         livello6: '',
@@ -112,13 +113,20 @@ const HomePage = () => {
     const filteredOptionslvl3 = livello3.filter((o) => o.link.includes(lvl2.value))
     const handleChange = (e) => {
         const key = e.target.name;
-        const value = e.target.value;
+        let value = e.target.value;
+        if (key == "url" && value.includes('?')) {
+			value = value + "&";
+		} else {
+			value = value + "?" ;
+		}
         setFormData({ ...formData, [key]: value })
     }
     const handleSubmit = (event) => {
         setLvl4(formData.livello4)
+        
         event.preventDefault();
-        const mc = `${lvl1}${lvl2.value}.${lvl3.value}.${formData.livello4}.${formData.livello5}.${formData.livello6}.${formData.livello7}.${formData.livello8}.${formData.livello9}`
+        let mc = ""
+        mc = `${formData.url}${lvl1}${lvl2.value}.${lvl3.value}.${formData.livello4}.${formData.livello5}.${formData.livello6}.${formData.livello7}.${formData.livello8}.${formData.livello9}`
         setMediacode(mc)
         setMcValid(true)
     };
@@ -179,6 +187,9 @@ const HomePage = () => {
                                         <InputGroup.Text id="basic-addon1">URL di partenza:</InputGroup.Text>
                                         <Form.Control
                                             placeholder="(Opzionale)"
+                                            name="url"
+                                            onChange={handleChange}
+                                            type="text"
 
                                         />
                                     </InputGroup>
